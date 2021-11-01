@@ -15,14 +15,19 @@ def run_vm(vm):
 
 def run_tests_in_dir(vm, path='./Tests/'):
     tests = [file for file in os.listdir(path) if isfile(join(path, file))]
-    all_correct = True
+    correct_count = 0
+    test_count = 0
     for test_name in tests:
-        test_correct = run_test(vm, test_name, dir_name=path)
-        if not test_correct:
-            all_correct = False
+        try:
+            correct = run_test(vm, test_name, dir_name=path)
+            correct_count += int(correct)
+        except AttributeError:
+            pass
+        test_count += 1
 
-    if all_correct:
-        print('\nAll tests in {} passed successfully\n'.format(path))
+    print('======================================\n{}: passed {}/{} tests\n'
+          '======================================'
+          .format(path, correct_count, test_count))
 
 
 def run_test(vm, test_name, dir_name='./Tests/'):
